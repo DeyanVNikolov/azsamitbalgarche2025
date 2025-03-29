@@ -14,10 +14,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
+    "crispy_forms",
+    "crispy_bulma",
+
     "itbalgarche.apps.ItbalgarcheConfig",
+    "accounts.apps.AccountsConfig"
 ]
 
 MIDDLEWARE = [
@@ -29,19 +30,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
 ]
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': '123',
-            'secret': '456',
-            'key': ''
-        }
-    }
-}
-
 ROOT_URLCONF = "azsamitbalgarche.urls"
 
 TEMPLATES = [
@@ -71,11 +60,10 @@ DATABASES = {
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-SITE_ID = 1
-ACCOUNT_EMAIL_VERIFICATION = "none"
+CRISPY_ALLOWED_TEMPLATE_PACKS = ("bulma",)
+CRISPY_TEMPLATE_PACK = "bulma"
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -83,6 +71,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 LANGUAGE_CODE = "bg-bg"
 TIME_ZONE = "Europe/Sofia"
@@ -95,6 +85,5 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
-
+APPEND_SLASH = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

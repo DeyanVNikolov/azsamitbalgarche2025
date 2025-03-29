@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Competition Platform{% endblock %}</title>
+    <meta name="description"
+          content="Join the Competition Platform to compete in challenging events and improve your skills.">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+
+    {% block extra_head %}{% endblock %}
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #f4f4f4;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        a {
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #ddd;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar a.navbar-item, .navbar a.navbar-link {
+            color: #ffffff;
+        }
+
+        .navbar-navlink:hover {
+            color: #79d0ff !important;
+            background-color: #122c59 !important;
+        }
+
+        .navbar-underlink {
+            color: #3a3a3a !important;
+        }
+
+        .navbar-burger span {
+            background-color: #ffffff !important;
+        }
+
+        .main-container {
+            flex: 1;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: auto;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            border-radius: 5px;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item navbar-navlink" href="/">
+            <strong>Deyan Nikolov</strong>
+        </a>
+        <a class="navbar-item navbar-navlink" href="/">
+            Home
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+            {% if request.user.is_authenticated %}
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">{{ request.user.username }}</a>
+                    <div class="navbar-dropdown">
+                        {% if request.user.is_superuser %}
+                            <a class="navbar-item navbar-underlink" href="/accounts/cv-admin/">CV Admin</a>
+                        {% endif %}
+                        <a class="navbar-item navbar-underlink" href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <a class="navbar-item" href="{% url 'login' %}">Login</a>
+                <a class="navbar-item" href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<main id="main" class="main-container">
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <article class="message is-{{ message.tags }}">
+                    <div class="message-body">
+                        {{ message }}
+                    </div>
+                </article>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>&copy; {% now "Y" %} Deyan Nikolov. All rights reserved.<br>
+            <small>All information provided is accurate and not fictional.</small></p>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const burger = document.querySelector('.navbar-burger');
+        const menu = document.querySelector('#navMenu');
+        if (burger && menu) {
+            burger.addEventListener('click', () => {
+                burger.classList.toggle('is-active');
+                menu.classList.toggle('is-active');
+                const expanded = burger.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+                burger.setAttribute('aria-expanded', expanded);
+            });
+        }
+
+        setTimeout(() => {
+            document.querySelectorAll('.message').forEach((message) => {
+                message.style.transition = "opacity 0.5s ease-out";
+                message.style.opacity = '0';
+                setTimeout(() => {
+                    message.remove();
+                }, 500);
+            });
+        }, 5000);
+    });
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

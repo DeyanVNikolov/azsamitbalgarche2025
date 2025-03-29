@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block extra_head %}
+    <style>
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            margin: auto;
+            max-width: 600px;
+        }
+        .card-header {
+            background-color: #f0c674;
+            color: #333;
+            padding: 1rem;
+        }
+        .card-content {
+            padding: 1.5rem;
+        }
+        .field label {
+            font-weight: bold;
+        }
+        .buttons {
+            margin-top: 1.5rem;
+        }
+    </style>
+    <script src="https://cdn.tiny.cloud/1/p7jhtkhlrtutk6r2fmeixmpvxchdxam2u7cwqdne4met4ft5/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            tinymce.init({
+                selector: 'textarea',
+                menubar: false,
+                plugins: 'lists link image code',
+                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image | code',
+                height: 300,
+                setup: function(editor) {
+                    editor.on('change', function() {
+                        editor.save();
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Edit {{ model_name|capfirst }} Record</p>
+                </header>
+                <div class="card-content">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="field is-grouped buttons">
+                            <div class="control">
+                                <button type="submit" class="button is-primary">
+                                    <span class="icon"><i class="fas fa-save"></i></span>
+                                    <span>Save Changes</span>
+                                </button>
+                            </div>
+                            <div class="control">
+                                <a class="button is-light" href="{% url 'cv_admin' %}">
+                                    <span class="icon"><i class="fas fa-times"></i></span>
+                                    <span>Cancel</span>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

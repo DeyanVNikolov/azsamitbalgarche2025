@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <style>
+        .equal-height {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-menu {
+                text-align: center;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Hero Section -->
+    <section class="hero is-primary is-bold" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <figure class="image is-128x128 is-inline-block">
+                    <img class="is-rounded" src="/static/{{ aboutme.image_name }}" alt="Profile Picture">
+                </figure>
+                <h1 class="title">{{ aboutme.name | safe }}
+                    <h2 class="subtitle">{{ aboutme.underline | safe }}
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+
+                <!-- za men -->
+                <div class="column is-full">
+                    <div class="box">
+                        <h2 class="title is-4">About Me</h2>
+                        <p>
+                            {{ aboutme.text | safe }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Obrazovanie -->
+                <div class="column is-half is-full-mobile is-flex is-align-items-stretch">
+                    <div class="box equal-height">
+                        <h2 class="title is-4">Education</h2>
+                        {% for edu in education %}
+                            <article class="media">
+                                <figure class="media-left">
+                              <span class="icon is-large has-text-info">
+                                <i class="fas fa-graduation-cap fa-2x"></i>
+                              </span>
+                                </figure>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>
+                                            <strong>{{ edu.degree }} {% if edu.graduated %}
+                                                <tag class="tag is-success">Graduated</tag>{% else %}
+                                                <tag class="tag is-danger">Currently</tag>{% endif %}</strong><br>
+                                            {{ edu.school_name }} &mdash; {{ edu.start_date }} to
+                                            {% if edu.graduated %}{{ edu.end_date }}{% else %}Present{% endif %}<br><br>
+                                            {{ edu.description | safe }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Certifikati -->
+                <div class="column is-half is-full-mobile is-flex is-align-items-stretch">
+                    <div class="box equal-height">
+                        <h2 class="title is-4">Certifications</h2>
+                        {% for cert in certificate %}
+                            <article class="media">
+                                <figure class="media-left">
+                               <span class="icon is-large has-text-success">
+                                 <i class="fas fa-certificate fa-2x"></i>
+                               </span>
+                                </figure>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>
+                                            {% if cert.link %}
+                                                <a href="{{ cert.link }}"><strong>{{ cert.name }}</strong>
+                                                    <tag class="tag is-link">LINK</tag>
+                                                </a>
+                                            {% else %}
+                                                <strong>{{ cert.name }}</strong>
+                                            {% endif %}
+                                            <br>
+                                            {{ cert.issued_by }} - {{ cert.issue_year }}<br>
+                                            {{ cert.description | safe }}
+                                            Expiry:
+                                            {% if cert.expiry_date %}{{ cert.expiry_date }}{% else %}N/A{% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Kursove -->
+                <div class="column is-full">
+                    <div class="box">
+                        <h2 class="title is-4">Courses</h2>
+                        <div class="columns is-multiline">
+                            {% for course in course %}
+                                <div class="column is-half is-full-mobile">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <p class="title is-5">{{ course.name }}</p>
+                                            <p class="subtitle is-6">{{ course.instituion }}
+                                                - {{ course.course_year }}<br>
+                                                {{ course.description | safe }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Postijeniqa -->
+                <div class="column is-full">
+                    <div class="box">
+                        <h2 class="title is-4">Achievements</h2>
+                        <div class="content">
+                            <ul>
+                                {% for ach in achievement %}
+                                    <li><strong>{{ ach.name }}</strong> - {{ ach.description | safe }} -
+                                        <tag class="tag is-info">{{ ach.date }}</tag>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Kontakt -->
+    <section class="section has-background-light" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+        <div class="container">
+            <h2 class="title is-4 has-text-centered">Contact</h2>
+            <div class="columns is-multiline is-centered">
+                {% for contact in contact %}
+                    <div class="column is-one-third is-full-mobile has-text-centered">
+                        <p><strong>{{ contact.title }}</strong><br><a
+                                href="{{ contact.link }}">{{ contact.link_text }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,588 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <style>
+        .section-title {
+            border-bottom: 2px solid #f0c674;
+            display: inline-block;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            background-color: #f0c674;
+            color: #333;
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-button {
+            margin-right: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        th, td {
+            vertical-align: middle !important;
+        }
+
+        .subheading {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .add-new-btn {
+            font-size: 0.9rem;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">CV Admin Panel</h1>
+
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">About Me</p>
+                </header>
+                <div class="card-content">
+                    <h3 class="subheading">Active Entries</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Underline</th>
+                            <th>Text</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in aboutme_list %}
+                            <tr>
+                                <td>{{ record.name }}</td>
+                                <td>{{ record.underline }}</td>
+                                <td>{{ record.text|truncatewords:10 }}</td>
+                                <td>
+                                    <a class="button is-small is-info action-button"
+                                       href="{% url 'cv_edit' 'aboutme' record.id %}">
+                                        <span class="icon"><i class="fas fa-edit"></i></span>
+                                        <span>Edit</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'aboutme' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No active About Me records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <h3 class="subheading">History</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Underline</th>
+                            <th>Text</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in aboutme_history_list %}
+                            <tr>
+                                <td>{{ record.name }}</td>
+                                <td>{{ record.underline }}</td>
+                                <td>{{ record.text|truncatewords:10 }}</td>
+                                <td>
+                                    <a class="button is-small is-success action-button"
+                                       href="{% url 'cv_restore' 'aboutme' record.id %}">
+                                        <span class="icon"><i class="fas fa-undo"></i></span>
+                                        <span>Restore</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'aboutme' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No history for About Me records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Education</p>
+                    <a class="button is-small is-primary add-new-btn" href="{% url 'cv_create' 'education' %}">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                        <span>Add New</span>
+                    </a>
+                </header>
+                <div class="card-content">
+                    <h3 class="subheading">Active Entries</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>School Name</th>
+                            <th>Degree</th>
+                            <th>Duration</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in education_list %}
+                            <tr>
+                                <td>{{ record.school_name }}</td>
+                                <td>{{ record.degree }}</td>
+                                <td>{{ record.start_date }} - {{ record.end_date }}</td>
+                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>
+                                    <a class="button is-small is-info action-button"
+                                       href="{% url 'cv_edit' 'education' record.id %}">
+                                        <span class="icon"><i class="fas fa-edit"></i></span>
+                                        <span>Edit</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'education' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No active Education records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <h3 class="subheading">History</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>School Name</th>
+                            <th>Degree</th>
+                            <th>Duration</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in education_history_list %}
+                            <tr>
+                                <td>{{ record.school_name }}</td>
+                                <td>{{ record.degree }}</td>
+                                <td>{{ record.start_date }} - {{ record.end_date }}</td>
+                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>
+                                    <a class="button is-small is-success action-button"
+                                       href="{% url 'cv_restore' 'education' record.id %}">
+                                        <span class="icon"><i class="fas fa-undo"></i></span>
+                                        <span>Restore</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'education' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No history for Education records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Certificates</p>
+                    <a class="button is-small is-primary add-new-btn" href="{% url 'cv_create' 'certificate' %}">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                        <span>Add New</span>
+                    </a>
+                </header>
+                <div class="card-content">
+                    <h3 class="subheading">Active Entries</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Issued By</th>
+                            <th>Issue Year</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in certificate_list %}
+                            <tr>
+                                <td>{{ record.name }}</td>
+                                <td>{{ record.issued_by }}</td>
+                                <td>{{ record.issue_year }}</td>
+                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>
+                                    <a class="button is-small is-info action-button"
+                                       href="{% url 'cv_edit' 'certificate' record.id %}">
+                                        <span class="icon"><i class="fas fa-edit"></i></span>
+                                        <span>Edit</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'certificate' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No active Certificate records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <h3 class="subheading">History</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Issued By</th>
+                            <th>Issue Year</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in certificate_history_list %}
+                            <tr>
+                                <td>{{ record.name }}</td>
+                                <td>{{ record.issued_by }}</td>
+                                <td>{{ record.issue_year }}</td>
+                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>
+                                    <a class="button is-small is-success action-button"
+                                       href="{% url 'cv_restore' 'certificate' record.id %}">
+                                        <span class="icon"><i class="fas fa-undo"></i></span>
+                                        <span>Restore</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'certificate' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No history for Certificate records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Courses</p>
+                    <a class="button is-small is-primary add-new-btn" href="{% url 'cv_create' 'course' %}">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                        <span>Add New</span>
+                    </a>
+                </header>
+                <div class="card-content">
+                    <h3 class="subheading">Active Entries</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Institution</th>
+                            <th>Year</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in course_list %}
+                            <tr>
+                                <td>{{ record.name }}</td>
+                                <td>{{ record.instituion }}</td>
+                                <td>{{ record.course_year }}</td>
+                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>
+                                    <a class="button is-small is-info action-button"
+                                       href="{% url 'cv_edit' 'course' record.id %}">
+                                        <span class="icon"><i class="fas fa-edit"></i></span>
+                                        <span>Edit</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'course' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No active Course records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <h3 class="subheading">History</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Institution</th>
+                            <th>Year</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in course_history_list %}
+                            <tr>
+                                <td>{{ record.name }}</td>
+                                <td>{{ record.instituion }}</td>
+                                <td>{{ record.course_year }}</td>
+                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>
+                                    <a class="button is-small is-success action-button"
+                                       href="{% url 'cv_restore' 'course' record.id %}">
+                                        <span class="icon"><i class="fas fa-undo"></i></span>
+                                        <span>Restore</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'course' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No history for Course records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Achievements</p>
+                    <a class="button is-small is-primary add-new-btn" href="{% url 'cv_create' 'achievement' %}">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                        <span>Add New</span>
+                    </a>
+                </header>
+                <div class="card-content">
+                    <h3 class="subheading">Active Entries</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in achievement_list %}
+                            <tr>
+                                <td>{{ record.name }}</td>
+                                <td>{{ record.date }}</td>
+                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>
+                                    <a class="button is-small is-info action-button"
+                                       href="{% url 'cv_edit' 'achievement' record.id %}">
+                                        <span class="icon"><i class="fas fa-edit"></i></span>
+                                        <span>Edit</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'achievement' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No active Achievement records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <h3 class="subheading">History</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in achievement_history_list %}
+                            <tr>
+                                <td>{{ record.name }}</td>
+                                <td>{{ record.date }}</td>
+                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>
+                                    <a class="button is-small is-success action-button"
+                                       href="{% url 'cv_restore' 'achievement' record.id %}">
+                                        <span class="icon"><i class="fas fa-undo"></i></span>
+                                        <span>Restore</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'achievement' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No history for Achievement records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Contact Data</p>
+                    <a class="button is-small is-primary add-new-btn" href="{% url 'cv_create' 'contactdata' %}">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                        <span>Add New</span>
+                    </a>
+                </header>
+                <div class="card-content">
+                    <h3 class="subheading">Active Entries</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Link Text</th>
+                            <th>Link</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in contactdata_list %}
+                            <tr>
+                                <td>{{ record.title }}</td>
+                                <td>{{ record.link_text }}</td>
+                                <td>{{ record.link }}</td>
+                                <td>
+                                    <a class="button is-small is-info action-button"
+                                       href="{% url 'cv_edit' 'contactdata' record.id %}">
+                                        <span class="icon"><i class="fas fa-edit"></i></span>
+                                        <span>Edit</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'contactdata' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No active Contact Data records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <h3 class="subheading">History</h3>
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Link Text</th>
+                            <th>Link</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in contactdata_history_list %}
+                            <tr>
+                                <td>{{ record.title }}</td>
+                                <td>{{ record.link_text }}</td>
+                                <td>{{ record.link }}</td>
+                                <td>
+                                    <a class="button is-small is-success action-button"
+                                       href="{% url 'cv_restore' 'contactdata' record.id %}">
+                                        <span class="icon"><i class="fas fa-undo"></i></span>
+                                        <span>Restore</span>
+                                    </a>
+                                    <a class="button is-small is-danger action-button"
+                                       href="{% url 'cv_delete' 'contactdata' record.id %}"
+                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No history for Contact Data records found.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}
