@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Competition Platform{% endblock %}</title>
-    <meta name="description"
-          content="Join the Competition Platform to compete in challenging events and improve your skills.">
+    <title>{% block title %}Deyan Nikolov{% endblock %}</title>
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
+
+    <link rel="icon" type="image/x-icon" href="/static/images/ico.ico">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+
+
 
     {% block extra_head %}{% endblock %}
 
