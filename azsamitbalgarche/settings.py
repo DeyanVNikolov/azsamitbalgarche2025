@@ -5,6 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "insecure-default-secret-key")
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "https://itbalgarche.deyannikolov.eu"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
