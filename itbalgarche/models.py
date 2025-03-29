@@ -31,7 +31,7 @@ class Education(models.Model):
     start_date = models.CharField(max_length=255)
     end_date = models.CharField(max_length=255)
     graduated = models.BooleanField(default=False)
-    description = models.TextField(default="")
+    description = models.TextField(default="", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
@@ -69,7 +69,7 @@ class Certificate(models.Model):
 class Course(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True, default="")
     instituion = models.CharField(max_length=255)
     course_year = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -86,10 +86,19 @@ class Course(models.Model):
 
 
 class Achievement(models.Model):
+
+    PLACEMENT_CHOICES = (
+        ('1st', '1st'),
+        ('2nd', '2nd'),
+        ('3rd', '3rd'),
+        ('4th', '4th'),
+    )
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True, default="")
     date = models.DateField()
+    placement = models.CharField(max_length=10, choices=PLACEMENT_CHOICES, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
@@ -124,6 +133,9 @@ class ContactData(models.Model):
 class ContactForm(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    subject = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    email = models.CharField(max_length=255, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -143,7 +155,8 @@ class ContactForm(models.Model):
 class ContactFormMessage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     contact_form = models.ForeignKey(ContactForm, on_delete=models.CASCADE, related_name='messages')
-    message = models.TextField()
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    message = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 4rem auto;
+        }
+        .login-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .login-card-header {
+            background-color: #3273dc;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        .login-card-content {
+            padding: 2rem;
+        }
+        .login-card-footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #f5f5f5;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container login-container">
+            <div class="card login-card">
+                <header class="card-header login-card-header">
+                    <p class="card-header-title">Sign In</p>
+                </header>
+                <div class="card-content login-card-content">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="notification is-danger">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="field">
+                            <label class="label">Username</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" name="username" placeholder="Username" required>
+                                <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+              </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Password</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="password" name="password" placeholder="Password" required>
+                                <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <button type="submit" class="button is-primary is-fullwidth">Login</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <footer class="card-footer login-card-footer">
+                    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+                </footer>
+            </div>
+        </div>
+    </section>
+{% endblock %}

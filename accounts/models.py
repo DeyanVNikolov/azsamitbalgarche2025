@@ -3,7 +3,6 @@ from django.db import models
 from django.db.models import CharField
 
 
-# Create your models here.
 class CustomUser(AbstractUser):
     username = CharField(max_length=150, unique=True)
     first_name = CharField(max_length=150, blank=True)

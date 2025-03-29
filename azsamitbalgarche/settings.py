@@ -33,6 +33,8 @@ MIDDLEWARE = [
 ]
 ROOT_URLCONF = "azsamitbalgarche.urls"
 
+SITE_ID = 1
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",

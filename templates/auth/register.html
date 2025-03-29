@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <style>
+        .register-container {
+            max-width: 400px;
+            margin: 4rem auto;
+        }
+        .register-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .register-card-header {
+            background-color: #3273dc;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        .register-card-content {
+            padding: 2rem;
+        }
+        .register-card-footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #f5f5f5;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container register-container">
+            <div class="card register-card">
+                <header class="card-header register-card-header">
+                    <p class="card-header-title">Register</p>
+                </header>
+                <div class="card-content register-card-content">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="notification is-danger">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="field">
+                            <label class="label">Username</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" name="username" placeholder="Enter your username" required>
+                                <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+              </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="email" name="email" placeholder="Enter your email" required>
+                                <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Password</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="password" name="password" placeholder="Enter your password" required>
+                                <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Confirm Password</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="password" name="password2" placeholder="Re-enter your password" required>
+                                <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <button type="submit" class="button is-primary is-fullwidth">Register</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <footer class="card-footer register-card-footer">
+                    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+                </footer>
+            </div>
+        </div>
+    </section>
+{% endblock %}

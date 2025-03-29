@@ -118,7 +118,9 @@
                     <a class="navbar-link">{{ request.user.username }}</a>
                     <div class="navbar-dropdown">
                         {% if request.user.is_superuser %}
+                            <a class="navbar-item navbar-underlink" href="/contact-forms/">Contacts</a>
                             <a class="navbar-item navbar-underlink" href="/accounts/cv-admin/">CV Admin</a>
+                            <a class="navbar-item navbar-underlink" href="/admin/" style="background-color: yellow">Site Admin</a>
                         {% endif %}
                         <a class="navbar-item navbar-underlink" href="{% url 'logout' %}">Logout</a>
                     </div>

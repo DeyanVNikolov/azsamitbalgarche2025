@@ -1,8 +1,13 @@
+import uuid
+
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect, get_object_or_404
+
+from accounts.models import CustomUser
 from itbalgarche.models import (
     AboutMe, Education, Certificate, Course,
     Achievement, ContactData
@@ -24,14 +29,42 @@ MODEL_MAP = {
 
 def profile(request):
     return render(request, "accounts/profile.html")
-
-
 def login_view(request):
-    return None
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("/")
+        else:
+            messages.error(request, "Invalid username or password")
+
+    return render(request, "auth/login.html")
 
 
-def register(request):
-    return None
+def register_view(request):
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        password2 = request.POST.get("password2")
+
+        if password != password2:
+            messages.error(request, "Passwords do not match.")
+        elif CustomUser.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists.")
+        elif CustomUser.objects.filter(email=email).exists():
+            messages.error(request, "Email is already in use.")
+        else:
+            user = CustomUser.objects.create_user(username=username, email=email, password=password)
+            login(request, user)
+            messages.success(request, "Registration successful. You are now logged in.")
+            return redirect("/")
+
+    return render(request, "auth/register.html")
+
 
 @login_required
 def logout_view(request):
@@ -40,6 +73,7 @@ def logout_view(request):
         return redirect("/")
 
     return redirect("/")
+
 
 @login_required
 @staff_member_required
@@ -161,3 +195,23 @@ def cv_delete(request, model_name, record_id):
     instance.delete()
     messages.success(request, f"{model_name.capitalize()} record permanently deleted.")
     return redirect("cv_admin")
+
+
+def cv_add_image(request):
+    if request.method == "POST":
+        img = request.FILES.get('image')
+        if img:
+            fs = FileSystemStorage(location='static/images/')
+            filename = fs.save(f"{img.name.split('.')[0]}_{uuid.uuid4()}.{img.name.split('.')[-1]}", img)
+
+            aboutme = AboutMe.objects.filter(is_active=True).latest('created_at')
+            aboutme.image_name = filename
+            aboutme.save()
+
+            messages.success(request, "Image added successfully.")
+            return redirect("cv_admin")
+        else:
+            messages.error(request, "No image provided.")
+            return redirect("cv_admin")
+
+    return render(request, "accounts/cv_upload_image.html")

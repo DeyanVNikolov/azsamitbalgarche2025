@@ -56,11 +56,15 @@
 {% block content %}
     <section class="section">
         <div class="container">
-            <h1 class="title">CV Admin Panel</h1>
+            <h1 class="title" style="color:white;">CV Admin Panel</h1>
 
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title">About Me</p>
+                    <a class="button is-small is-primary add-new-btn" href="/accounts/cv-admin/add-image/">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                        <span>Upload new image</span>
+                    </a>
                 </header>
                 <div class="card-content">
                     <h3 class="subheading">Active Entries</h3>
@@ -78,18 +82,12 @@
                             <tr>
                                 <td>{{ record.name }}</td>
                                 <td>{{ record.underline }}</td>
-                                <td>{{ record.text|truncatewords:10 }}</td>
+                                <td>{{ record.text|truncatewords:10|safe }}</td>
                                 <td>
                                     <a class="button is-small is-info action-button"
                                        href="{% url 'cv_edit' 'aboutme' record.id %}">
                                         <span class="icon"><i class="fas fa-edit"></i></span>
                                         <span>Edit</span>
-                                    </a>
-                                    <a class="button is-small is-danger action-button"
-                                       href="{% url 'cv_delete' 'aboutme' record.id %}"
-                                       onclick="return confirm('Are you sure you want to permanently delete this record?');">
-                                        <span class="icon"><i class="fas fa-trash"></i></span>
-                                        <span>Delete</span>
                                     </a>
                                 </td>
                             </tr>
@@ -116,7 +114,7 @@
                             <tr>
                                 <td>{{ record.name }}</td>
                                 <td>{{ record.underline }}</td>
-                                <td>{{ record.text|truncatewords:10 }}</td>
+                                <td>{{ record.text|truncatewords:10|safe }}</td>
                                 <td>
                                     <a class="button is-small is-success action-button"
                                        href="{% url 'cv_restore' 'aboutme' record.id %}">
@@ -167,7 +165,7 @@
                                 <td>{{ record.school_name }}</td>
                                 <td>{{ record.degree }}</td>
                                 <td>{{ record.start_date }} - {{ record.end_date }}</td>
-                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>{{ record.description|truncatewords:10|safe }}</td>
                                 <td>
                                     <a class="button is-small is-info action-button"
                                        href="{% url 'cv_edit' 'education' record.id %}">
@@ -206,7 +204,7 @@
                                 <td>{{ record.school_name }}</td>
                                 <td>{{ record.degree }}</td>
                                 <td>{{ record.start_date }} - {{ record.end_date }}</td>
-                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>{{ record.description|truncatewords:10|safe }}</td>
                                 <td>
                                     <a class="button is-small is-success action-button"
                                        href="{% url 'cv_restore' 'education' record.id %}">
@@ -257,7 +255,7 @@
                                 <td>{{ record.name }}</td>
                                 <td>{{ record.issued_by }}</td>
                                 <td>{{ record.issue_year }}</td>
-                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>{{ record.description|truncatewords:10|safe }}</td>
                                 <td>
                                     <a class="button is-small is-info action-button"
                                        href="{% url 'cv_edit' 'certificate' record.id %}">
@@ -296,7 +294,7 @@
                                 <td>{{ record.name }}</td>
                                 <td>{{ record.issued_by }}</td>
                                 <td>{{ record.issue_year }}</td>
-                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>{{ record.description|truncatewords:10|safe }}</td>
                                 <td>
                                     <a class="button is-small is-success action-button"
                                        href="{% url 'cv_restore' 'certificate' record.id %}">
@@ -347,7 +345,7 @@
                                 <td>{{ record.name }}</td>
                                 <td>{{ record.instituion }}</td>
                                 <td>{{ record.course_year }}</td>
-                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>{{ record.description|truncatewords:10|safe }}</td>
                                 <td>
                                     <a class="button is-small is-info action-button"
                                        href="{% url 'cv_edit' 'course' record.id %}">
@@ -386,7 +384,7 @@
                                 <td>{{ record.name }}</td>
                                 <td>{{ record.instituion }}</td>
                                 <td>{{ record.course_year }}</td>
-                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>{{ record.description|truncatewords:10|safe }}</td>
                                 <td>
                                     <a class="button is-small is-success action-button"
                                        href="{% url 'cv_restore' 'course' record.id %}">
@@ -435,7 +433,7 @@
                             <tr>
                                 <td>{{ record.name }}</td>
                                 <td>{{ record.date }}</td>
-                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>{{ record.description|truncatewords:10|safe }}</td>
                                 <td>
                                     <a class="button is-small is-info action-button"
                                        href="{% url 'cv_edit' 'achievement' record.id %}">
@@ -472,7 +470,7 @@
                             <tr>
                                 <td>{{ record.name }}</td>
                                 <td>{{ record.date }}</td>
-                                <td>{{ record.description|truncatewords:10 }}</td>
+                                <td>{{ record.description|truncatewords:10 |safe }}</td>
                                 <td>
                                     <a class="button is-small is-success action-button"
                                        href="{% url 'cv_restore' 'achievement' record.id %}">

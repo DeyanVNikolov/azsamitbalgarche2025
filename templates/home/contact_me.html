@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <style>
+        .contact-container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container contact-container">
+            <h1 class="title contact-header" style="color: white !important;">Contact Us</h1>
+            <div class="box">
+                <form method="post" action="{% url 'contact_me' %}">
+                    {% csrf_token %}
+                    {% if user.is_authenticated %}
+                        <div class="field">
+                            <label class="label">Your name</label>
+                            <div class="control">
+                                <input readonly disabled class="input" type="text" name="name" placeholder="Your name"
+                                       required value="{{ user.username }}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Your email</label>
+                            <div class="control">
+                                <input readonly disabled class="input" type="text" name="email" placeholder="Your email"
+                                       required value="{{ user.email }}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Subject</label>
+                            <div class="control">
+                                <input class="input" type="text" name="subject" placeholder="Subject" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Message</label>
+                            <div class="control">
+                                <textarea class="textarea" name="message" placeholder="Your message..."
+                                          required></textarea>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="notification is-warning">
+                            <strong>Note:</strong> You are not logged in. By logging in, you can follow up on your messages
+                            in the chat for easier communication.
+                            <br>
+                            <strong>Note:</strong> You can still send a message, but responses may be slower via email.
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Your name</label>
+                            <div class="control">
+                                <input class="input" type="text" name="name" placeholder="Your name" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Your email</label>
+                            <div class="control">
+                                <input class="input" type="email" name="email" placeholder="Your email" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Subject</label>
+                            <div class="control">
+                                <input class="input" type="text" name="subject" placeholder="Subject" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Message</label>
+                            <div class="control">
+                                <textarea class="textarea" name="message" placeholder="Your message..."
+                                          required></textarea>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="field is-grouped is-grouped-centered">
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -21,8 +21,8 @@
     <section class="hero is-primary is-bold" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
         <div class="hero-body">
             <div class="container has-text-centered">
-                <figure class="image is-128x128 is-inline-block">
-                    <img class="is-rounded" src="/static/{{ aboutme.image_name }}" alt="Profile Picture">
+                <figure class="image is-inline-block" style="max-height: 256px; max-width: 256px;">
+                    <img class="is-rounded" src="/static/images/{{ aboutme.image_name }}" alt="Profile Picture">
                 </figure>
                 <h1 class="title">{{ aboutme.name | safe }}
                     <h2 class="subtitle">{{ aboutme.underline | safe }}
@@ -113,7 +113,7 @@
                         <div class="columns is-multiline">
                             {% for course in course %}
                                 <div class="column is-half is-full-mobile">
-                                    <div class="card">
+                                    <div class="card" style="flex: 1 !important;">
                                         <div class="card-content">
                                             <p class="title is-5">{{ course.name }}</p>
                                             <p class="subtitle is-6">{{ course.instituion }}
@@ -134,8 +134,26 @@
                         <div class="content">
                             <ul>
                                 {% for ach in achievement %}
-                                    <li><strong>{{ ach.name }}</strong> - {{ ach.description | safe }} -
+                                    <li>
                                         <tag class="tag is-info">{{ ach.date }}</tag>
+                                        <strong>{{ ach.name }}</strong>  {% if ach.placement %}
+                                        {% if ach.placement == "1st" %}
+                                            <tag class="tag is-warning is-size-5 is-uppercase has-text-weight-bold"><i
+                                                    class="fas fa-trophy"></i>&nbsp;1ST
+                                            </tag>
+                                        {% elif ach.placement == "2nd" %}
+                                            <tag class="tag is-light is-size-5 is-uppercase has-text-weight-bold"><i
+                                                    class="fas fa-trophy"></i>&nbsp;2ND
+                                            </tag>
+                                        {% elif ach.placement == "3rd" %}
+                                            <tag class="tag is-info is-size-5 is-uppercase has-text-weight-bold"><i
+                                                    class="fas fa-trophy"></i>&nbsp;3RD
+                                            </tag>
+                                        {% endif %}
+                                    {% endif %}
+                                        <br>
+
+                                        <span>{{ ach.description | safe }}</span>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -151,6 +169,13 @@
     <section class="section has-background-light" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
         <div class="container">
             <h2 class="title is-4 has-text-centered">Contact</h2>
+            <a class="button is-link is-fullwidth" id="contact-button" href="/contact-me/">
+                <span class="icon is-small">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                <span>Contact Me</span>
+            </a>
+            <br>
             <div class="columns is-multiline is-centered">
                 {% for contact in contact %}
                     <div class="column is-one-third is-full-mobile has-text-centered">

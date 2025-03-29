@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 
 {% block extra_head %}
     <style>
@@ -25,23 +24,6 @@
             margin-top: 1.5rem;
         }
     </style>
-    <script src="https://cdn.tiny.cloud/1/p7jhtkhlrtutk6r2fmeixmpvxchdxam2u7cwqdne4met4ft5/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            tinymce.init({
-                selector: 'textarea',
-                menubar: false,
-                plugins: 'lists link image code',
-                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image | code',
-                height: 300,
-                setup: function(editor) {
-                    editor.on('change', function() {
-                        editor.save();
-                    });
-                },
-            });
-        });
-    </script>
 {% endblock %}
 
 {% block content %}
@@ -49,17 +31,22 @@
         <div class="container">
             <div class="card">
                 <header class="card-header">
-                    <p class="card-header-title">Edit {{ model_name|capfirst }} Record</p>
+                    <p class="card-header-title">Upload Image</p>
                 </header>
                 <div class="card-content">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ form|crispy }}
+                        <div class="field">
+                            <label class="label">Select Image</label>
+                            <div class="control">
+                                <input class="input" type="file" name="image" accept="image/*">
+                            </div>
+                        </div>
                         <div class="field is-grouped buttons">
                             <div class="control">
                                 <button type="submit" class="button is-primary">
-                                    <span class="icon"><i class="fas fa-save"></i></span>
-                                    <span>Save Changes</span>
+                                    <span class="icon"><i class="fas fa-upload"></i></span>
+                                    <span>Upload</span>
                                 </button>
                             </div>
                             <div class="control">

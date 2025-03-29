@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <style>
+        .contact-forms-container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container contact-forms-container">
+            <div class="box">
+                <h1 class="title has-text-primary">Contact Forms</h1>
+                {% if contact_forms %}
+                    <table class="table is-fullwidth is-striped is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th class="has-text-centered">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for form in contact_forms %}
+                            <tr>
+                                <td>{{ form.subject }}</td>
+                                <td class="has-text-centered">
+                                    <a class="button is-small is-info" href="/contact-form/{{ form.id }}">
+                                        <span class="icon is-small"><i class="fas fa-eye"></i></span>
+                                        <span>View</span>
+                                    </a>
+                                    <a class="button is-small is-danger" href="/delete-contact-form/{{ form.id }}">
+                                        <span class="icon is-small"><i class="fas fa-trash"></i></span>
+                                        <span>Delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="notification is-warning">
+                        No contact forms available.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
